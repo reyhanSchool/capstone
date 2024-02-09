@@ -1,16 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const SquareWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
-  return (
-    <View style={[styles.container, { backgroundColor: color }]}>
-      <ImageBackground source={imageUrl} style={styles.imageBackground}>
+  const navigation = useNavigation();
 
-      </ImageBackground>
-      <View style={styles.titleContainer}>
-        <Text style={[styles.title, { fontSize: fontSize }]}>{title}</Text>
+  const handlePress = () => {
+    if (title === "No More Meds") {
+      navigation.navigate('Medications');
+    }
+  };
+
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <View style={[styles.container, { backgroundColor: color }]}>
+        <ImageBackground source={imageUrl} style={styles.imageBackground}>
+
+        </ImageBackground>
+        <View style={styles.titleContainer}>
+          <Text style={[styles.title, { fontSize: fontSize }]}>{title}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -22,7 +33,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     margin: 15,
     elevation: 0.5, // Add shadow
-
   },
   imageBackground: {
     flex: 1,
