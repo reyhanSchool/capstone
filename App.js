@@ -6,7 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SquareWithImageBackground from './components/SquareWithImageBackground';
 import RectangleWithImageBackground from './components/RectangleWithImageBackground';
 import Greeting from './components/WelcomeMessage';
-import Medications from './components/Medications'; // Import the Medications component
+import Medications from './components/Medications';
+import CalendarScreen from './components/CalendarScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
             <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Medications" component={Medications} />
+                <Stack.Screen name="CalendarScreen" component={CalendarScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
@@ -62,10 +64,11 @@ function HomeScreen({ navigation }) {
                 />
             </View>
             <RectangleWithImageBackground          
-                title="March 16, Appointment"
+                title="Calendar"
                 imageUrl={require('./assets/hospitalBackground.png')}
                 color="#FCADAD"
                 fontSize={25} // Example font size
+                onPress={() => navigation.navigate('Calendar')}
             />
             <StatusBar style="auto" />
         </View>

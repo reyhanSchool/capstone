@@ -1,8 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const RectangleWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    if (title === "Calendar") {
+      navigation.navigate('CalendarScreen');
+    }
+  };
     return (
+      <TouchableOpacity onPress={handlePress}>
         <View style={[styles.container, { backgroundColor: color }]}>
           <ImageBackground source={imageUrl} style={styles.imageBackground}>
     
@@ -11,6 +20,7 @@ const RectangleWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
             <Text style={[styles.title, { fontSize: fontSize }]}>{title}</Text>
           </View>
         </View>
+      </TouchableOpacity>
       );
 };
 
