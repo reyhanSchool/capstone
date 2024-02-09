@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const CalendarScreen = () => {
-  // Sample state to manage selected date
+
   const [selectedDate, setSelectedDate] = useState(null);
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+
+  //Function to get the current year and month
+  const getCurrentMonthAndYear = () => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const month = months[currentDate.getMonth()];
+    return `${month} ${year}`;
+  };
 
   // Function to handle date selection
   const handleDateSelection = (date) => {
@@ -11,31 +20,37 @@ const CalendarScreen = () => {
     // You can implement further actions upon date selection, such as navigating to a specific date's details
   };
 
+  // Function to generate an array of dates based on the number of days in the current month
+  const generateDatesArray = () => {
+    const month = currentDate.getMonth() + 1; 
+
+    // Get the number of days in the month
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    // Generate an array of dates from 1 to the number of days in the month
+    const datesArray = [];
+    for (let i = 1; i <= daysInMonth; i++) {
+      datesArray.push(i);
+    }
+    return datesArray;
+  };
+
   // Render function for individual date cells
   const renderDateCell = (date) => {
     // You can customize this rendering function according to your design requirements
     return (
-      <TouchableOpacity onPress={() => handleDateSelection(date)}>
+      <TouchableOpacity key={date} onPress={() => handleDateSelection(date)}>
         <View style={styles.dateCell}>
           <Text style={styles.dateText}>{date}</Text>
         </View>
       </TouchableOpacity>
     );
   };
-
-  // Function to generate an array of dates (for example, a month's dates)
-  const generateDatesArray = () => {
-    // Sample implementation for generating dates array (1 to 31)
-    const datesArray = [];
-    for (let i = 1; i <= 31; i++) {
-      datesArray.push(i);
-    }
-    return datesArray;
-  };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.headerText}>Calendar Screen</Text>
+      <Text style={styles.headerText}>{getCurrentMonthAndYear()}</Text>
       <View style={styles.calendarContainer}>
         {/* Render your calendar here */}
         {generateDatesArray().map(date => renderDateCell(date))}
@@ -48,7 +63,7 @@ const CalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingVertical: 20,
   },
