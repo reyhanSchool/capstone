@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SquareWithImageBackground from './components/SquareWithImageBackground';
 import RectangleWithImageBackground from './components/RectangleWithImageBackground';
 import Greeting from './components/WelcomeMessage';
-import Medications from './components/Medications'; 
+import Medications from './components/Medications'; // Import the Medications component
 
 const Stack = createStackNavigator();
 
