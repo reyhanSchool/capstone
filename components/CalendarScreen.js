@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
 const CalendarScreen = () => {
-
   const [selectedDate, setSelectedDate] = useState(null);
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  //Function to get the current year and month
-  const getCurrentMonthAndYear = () => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const month = months[currentDate.getMonth()];
-    return `${month} ${year}`;
-  };
+  const currentYear = new Date().getFullYear();
+  const yearsArray = Array.from({length: 100 }, (_, index) => currentYear - index);
 
   // Function to handle date selection
   const handleDateSelection = (date) => {
@@ -20,14 +16,9 @@ const CalendarScreen = () => {
     // You can implement further actions upon date selection, such as navigating to a specific date's details
   };
 
-  // Function to generate an array of dates based on the number of days in the current month
+  // Function to generate an array of dates based on the number of days in the selected month
   const generateDatesArray = () => {
-    const month = currentDate.getMonth() + 1; 
-
-    // Get the number of days in the month
-    const daysInMonth = new Date(year, month, 0).getDate();
-
-    // Generate an array of dates from 1 to the number of days in the month
+    const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
     const datesArray = [];
     for (let i = 1; i <= daysInMonth; i++) {
       datesArray.push(i);
@@ -46,11 +37,41 @@ const CalendarScreen = () => {
       </TouchableOpacity>
     );
   };
-  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.headerText}>{getCurrentMonthAndYear()}</Text>
+      <View style={styles.header}>
+        <Picker
+          selectedValue={selectedMonth}
+          onValueChange={(itemValue) => setSelectedMonth(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="January" value={0} />
+          <Picker.Item label="February" value={1} />
+          <Picker.Item label="March" value={2} />
+          <Picker.Item label="April" value={3} />
+          <Picker.Item label="May" value={4} />
+          <Picker.Item label="June" value={5} />
+          <Picker.Item label="July" value={6} />
+          <Picker.Item label="August" value={7} />
+          <Picker.Item label="September" value={8} />
+          <Picker.Item label="October" value={9} />
+          <Picker.Item label="November" value={10} />
+          <Picker.Item label="December" value={11} />
+        </Picker>
+
+
+        <Picker
+  selectedValue={selectedYear}
+  onValueChange={(itemValue) => setSelectedYear(itemValue)}
+  style={styles.picker}
+>
+  {yearsArray.map((year) => (
+    <Picker.Item key={year} label={year.toString()} value={year} />
+  ))}
+</Picker>
+
+      </View>
       <View style={styles.calendarContainer}>
         {/* Render your calendar here */}
         {generateDatesArray().map(date => renderDateCell(date))}
@@ -67,10 +88,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  picker: {
+    width: 150,
+    marginHorizontal: 10,
   },
   calendarContainer: {
     flexDirection: 'row',
