@@ -26,19 +26,22 @@ const RectangleWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: 330,
-        height: 150,
+        width: 340,
+        height: 120,
         borderRadius: 10,
         overflow: 'hidden',
-        elevation: 0.5, // Add shadow
+        elevation: 4, // Add shadow
+        margin: 20,
       },
       imageBackground: {
         flex: 1,
-        width: '100%',
-        height: '100%',
+        width: 100,
+        height: 100,
         opacity: 0.1, // Adjust the opacity of the image
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 10,
+        marginLeft: 10,
       },
       titleContainer: {
         position: 'absolute',

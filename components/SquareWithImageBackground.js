@@ -28,19 +28,21 @@ const SquareWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
 const styles = StyleSheet.create({
   container: {
     width: 150,
-    height: 150,
+    height: 120,
     borderRadius: 10,
     overflow: 'hidden',
-    margin: 15,
-    elevation: 0.5, // Add shadow
+    margin: 20,
+    elevation: 4, // Add shadow
   },
   imageBackground: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: 100,
+    height: 100,
     opacity: 0.1, // Adjust the opacity of the image
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 5,
+    marginLeft: 5,
   },
   titleContainer: {
     position: 'absolute',

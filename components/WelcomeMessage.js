@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
   greeting: {
     textAlign: 'left',
     fontSize: 40,
+    marginBottom: 10,
+    alignContent: 'flex-start',
+    marginLeft: 20, // Adjust this value to give some space to the left
   },
 });
 
