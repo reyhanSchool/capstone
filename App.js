@@ -43,20 +43,24 @@ function HomeScreen({ navigation }) {
           <Greeting timeOfDay={currentHour} name={name} />
           
           <View style={styles.content}>
-              <RectangleWithImageBackground          
+              <RectangleWithImageBackground      
+                  id="Live View"    
                   title="In Room"
                   imageUrl={require('./assets/statusBackground.png')}
                   color="#CCE9C1"
                   fontSize={35} // Example font size
+                  onPress={() => navigation.navigate('Medications')}// Need to change to the live view page
               />
               <View style={styles.row}>
                   <SquareWithImageBackground
+                      id="Temperature Log"
                       title="34°"
                       imageUrl={require('./assets/thermBackground.png')}
                       color="#E5B9FA"
                       fontSize={45} // Example font size
                   />
                   <SquareWithImageBackground
+                      id="Medication"
                       title="2 left"
                       imageUrl={require('./assets/pillBackground.png')}
                       color="#FFCA99"
@@ -65,6 +69,7 @@ function HomeScreen({ navigation }) {
                   />
               </View>
               <RectangleWithImageBackground          
+                    id="Appointments"
                   title="Calendar"
                   imageUrl={require('./assets/hospitalBackground.png')}
                   color="#FCADAD"

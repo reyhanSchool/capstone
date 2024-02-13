@@ -2,13 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const SquareWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
+const SquareWithImageBackground = ({id, title, imageUrl, color, fontSize }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    if (title === "No More Meds") {
+    if (id === "Medication") {
       navigation.navigate('Medications');
     }
+   
   };
 
   return (

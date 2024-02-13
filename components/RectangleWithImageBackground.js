@@ -2,12 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const RectangleWithImageBackground = ({ title, imageUrl, color, fontSize }) => {
+const RectangleWithImageBackground = ({id, title, imageUrl, color, fontSize }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    if (title === "Calendar") {
+    if (id === "Appointments") {
       navigation.navigate('CalendarScreen');
+    }
+    else if(id === "Live View"){
+      navigation.navigate('Medications') //Need to create the live view page
     }
   };
     return (
