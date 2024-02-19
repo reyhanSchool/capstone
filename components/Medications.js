@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
 
+
 const Medications = () => {
     // State for managing medications list
     const [medications, setMedications] = useState([

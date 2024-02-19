@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 const CalendarScreen = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [isCalendarCollapsed, setIsCalendarCollapsed] = useState(false); // New state
+  const [isCalendarCollapsed, setIsCalendarCollapsed] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const currentYear = new Date().getFullYear();
   const yearsArray = Array.from({ length: 100 }, (_, index) => currentYear - index);
 
-  // Function to handle date selection
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-    setIsCalendarCollapsed(true); // Collapse calendar when a date is selected
+    setIsCalendarCollapsed(true);
+    fadeAnim.setValue(0);
+    animateFadeIN();
   };
 
-  // Function to handle back button press
   const handleBackButtonPress = () => {
     setSelectedDate(null);
-    setIsCalendarCollapsed(false); // Expand calendar when back button is pressed
+    setIsCalendarCollapsed(false);
+    fadeAnim.setValue(0);
+    animateFadeIN();
   };
 
-  // Function to generate an array of dates based on the number of days in the selected month
+  const animateFadeIN = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+ 
   const generateDatesArray = () => {
     const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
     const datesArray = [];
@@ -33,9 +44,7 @@ const CalendarScreen = () => {
     return datesArray;
   };
 
-  // Render function for individual date cells
   const renderDateCell = (date) => {
-    // You can customize this rendering function according to your design requirements
     return (
       <TouchableOpacity key={date} onPress={() => handleDateSelection(date)}>
         <View style={styles.dateCell}>
@@ -78,43 +87,35 @@ const CalendarScreen = () => {
         </Picker>
       </View>
 
-      {/* Render the calendar only if it's not collapsed */}
       {!isCalendarCollapsed && (
         <View style={styles.calendarContainer}>
-          {/* Render your calendar here */}
           {generateDatesArray().map(date => renderDateCell(date))}
         </View>
       )}
 
-      {/* Display selected date and events */}
       {selectedDate && isCalendarCollapsed && (
-        
-        <View style={styles.selectedDateContainer}>
+        <Animated.View style={[styles.selectedDateContainer, { opacity: fadeAnim }]}>
           <Text style={styles.selectedDateText}>
             Selected Date: {selectedDate}/{selectedMonth + 1}/{selectedYear}
           </Text>
-          {/* Render events for the selected date here */}
-          {/* Replace the placeholder text with actual events */}
           <Text style={styles.eventsText}>Events for {selectedDate}/{selectedMonth + 1}/{selectedYear}:</Text>
           <Text style={styles.eventsText}>Event 1</Text>
           <Text style={styles.eventsText}>Event 2</Text>
 
-            {/* Back button to collapse selected day and display calendar */}
-            <Button title="Back" onPress={handleBackButtonPress} />
-
-        </View>
+          <Button title="Back" onPress={handleBackButtonPress} />
+        </Animated.View>
       )}
     </ScrollView>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingTop: 20,
+    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -125,6 +126,9 @@ const styles = StyleSheet.create({
   picker: {
     width: 150,
     marginHorizontal: 10,
+  },
+  contentContainer: {
+    flexGrow: 1,
   },
   calendarContainer: {
     flexDirection: 'row',

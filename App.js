@@ -38,7 +38,7 @@ function HomeScreen({ navigation }) {
           imageUrl={require('./assets/statusBackground.png')}
           color="#CCE9C1"
           fontSize={35}
-          onPress={() => navigation.navigate('CalendarScreen')} // Adjusted navigation to 'CalendarScreen'
+          onPress={() => navigation.navigate('CalendarScreen')} 
         />
         <View style={styles.row}>
           <SquareWithImageBackground
@@ -54,7 +54,7 @@ function HomeScreen({ navigation }) {
             imageUrl={require('./assets/pillBackground.png')}
             color="#FFCA99"
             fontSize={25}
-            onPress={() => navigation.navigate('Medications')} // Adjusted navigation to 'Medications'
+            onPress={() => navigation.navigate('Medications')} 
           />
         </View>
         <RectangleWithImageBackground
@@ -63,7 +63,7 @@ function HomeScreen({ navigation }) {
           imageUrl={require('./assets/hospitalBackground.png')}
           color="#FCADAD"
           fontSize={25}
-          onPress={() => navigation.navigate('CalendarScreen')} // Adjusted navigation to 'CalendarScreen'
+          onPress={() => navigation.navigate('CalendarScreen')}
         />
       </View>
       <StatusBar style="auto" />
