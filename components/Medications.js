@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, ScrollView, Text, StyleSheet, TextInput, Button, TouchableOpacity, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Medications = () => {
@@ -14,7 +14,10 @@ const Medications = () => {
     // State for managing form input
     const [newMedicationTitle, setNewMedicationTitle] = useState('');
     const [newMedicationDescription, setNewMedicationDescription] = useState('');
-    const [showForm, setShowForm] = useState(false); 
+    const [showForm, setShowForm] = useState(false); // State variable to control form visibility
+
+    // Animation state
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     // Function to add a new medication
     const addMedication = () => {
@@ -22,13 +25,26 @@ const Medications = () => {
             setMedications([...medications, { title: newMedicationTitle, description: newMedicationDescription }]);
             setNewMedicationTitle('');
             setNewMedicationDescription('');
-            setShowForm(false);
+            setShowForm(false); 
         }
     };
 
-    // Function to toggle form visibility
+    // Function to toggle form visibility with animation
     const toggleForm = () => {
+        fadeAnim.setValue(0);
         setShowForm(!showForm);
+        if (!showForm) {
+            animateFadeIN();
+        }
+    };
+
+    // Function to animate fade in
+    const animateFadeIN = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start();
     };
 
     // Function to remove a medication
@@ -46,21 +62,23 @@ const Medications = () => {
                     <MaterialIcons name={showForm ? "remove" : "add"} size={24} color="black" />
                 </TouchableOpacity>
             </View>
-            <ScrollView style={styles.scrollView}>
-                {medications.map((medication, index) => (
-                    <View key={index} style={styles.medicationItemWrapper}>
-                        <View style={styles.medicationItem}>
-                            <Text style={styles.medicationTitle}>{medication.title}</Text>
-                            <Text style={styles.medicationDescription}>{medication.description}</Text>
-                            <TouchableOpacity onPress={() => removeMedication(index)}>
-                                <Text style={styles.removeButton}>Remove</Text>
-                            </TouchableOpacity>
+            {!showForm && (
+                <ScrollView style={styles.scrollView}>
+                    {medications.map((medication, index) => (
+                        <View key={index} style={styles.medicationItemWrapper}>
+                            <View style={styles.medicationItem}>
+                                <Text style={styles.medicationTitle}>{medication.title}</Text>
+                                <Text style={styles.medicationDescription}>{medication.description}</Text>
+                                <TouchableOpacity onPress={() => removeMedication(index)}>
+                                    <Text style={styles.removeButton}>Remove</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                ))}
-            </ScrollView>
+                    ))}
+                </ScrollView>
+            )}
             {showForm && (
-                <View style={[styles.formContainer, styles.centeredView]}>
+                <Animated.View style={[styles.formContainer, styles.centeredView, { opacity: fadeAnim }]}>
                     <TextInput
                         style={styles.input}
                         placeholder="Medication Title"
@@ -74,7 +92,7 @@ const Medications = () => {
                         onChangeText={text => setNewMedicationDescription(text)}
                     />
                     <Button title="Add Medication" onPress={addMedication} />
-                </View>
+                </Animated.View>
             )}
         </View>
     );
