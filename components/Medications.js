@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
-
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Medications = () => {
     // State for managing medications list
@@ -14,6 +14,7 @@ const Medications = () => {
     // State for managing form input
     const [newMedicationTitle, setNewMedicationTitle] = useState('');
     const [newMedicationDescription, setNewMedicationDescription] = useState('');
+    const [showForm, setShowForm] = useState(false); 
 
     // Function to add a new medication
     const addMedication = () => {
@@ -21,7 +22,13 @@ const Medications = () => {
             setMedications([...medications, { title: newMedicationTitle, description: newMedicationDescription }]);
             setNewMedicationTitle('');
             setNewMedicationDescription('');
+            setShowForm(false);
         }
+    };
+
+    // Function to toggle form visibility
+    const toggleForm = () => {
+        setShowForm(!showForm);
     };
 
     // Function to remove a medication
@@ -33,33 +40,42 @@ const Medications = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Medications</Text>
+            <View style={styles.header}>
+                <Text style={styles.title}>Medications</Text>
+                <TouchableOpacity onPress={toggleForm}>
+                    <MaterialIcons name={showForm ? "remove" : "add"} size={24} color="black" />
+                </TouchableOpacity>
+            </View>
             <ScrollView style={styles.scrollView}>
                 {medications.map((medication, index) => (
-                    <View key={index} style={styles.medicationItem}>
-                        <Text style={styles.medicationTitle}>{medication.title}</Text>
-                        <Text style={styles.medicationDescription}>{medication.description}</Text>
-                        <TouchableOpacity onPress={() => removeMedication(index)}>
-                            <Text style={styles.removeButton}>Remove</Text>
-                        </TouchableOpacity>
+                    <View key={index} style={styles.medicationItemWrapper}>
+                        <View style={styles.medicationItem}>
+                            <Text style={styles.medicationTitle}>{medication.title}</Text>
+                            <Text style={styles.medicationDescription}>{medication.description}</Text>
+                            <TouchableOpacity onPress={() => removeMedication(index)}>
+                                <Text style={styles.removeButton}>Remove</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 ))}
             </ScrollView>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Medication Title"
-                    value={newMedicationTitle}
-                    onChangeText={text => setNewMedicationTitle(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Medication Description"
-                    value={newMedicationDescription}
-                    onChangeText={text => setNewMedicationDescription(text)}
-                />
-                <Button title="Add Medication" onPress={addMedication} />
-            </View>
+            {showForm && (
+                <View style={[styles.formContainer, styles.centeredView]}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Medication Title"
+                        value={newMedicationTitle}
+                        onChangeText={text => setNewMedicationTitle(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Medication Description"
+                        value={newMedicationDescription}
+                        onChangeText={text => setNewMedicationDescription(text)}
+                    />
+                    <Button title="Add Medication" onPress={addMedication} />
+                </View>
+            )}
         </View>
     );
 };
@@ -70,16 +86,27 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#fff',
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
     },
     scrollView: {
         flex: 1,
     },
-    medicationItem: {
+    medicationItemWrapper: {
         marginBottom: 20,
+    },
+    medicationItem: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
     },
     medicationTitle: {
         fontSize: 20,
@@ -102,6 +129,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 10,
+    },
+    centeredView: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 
