@@ -1,10 +1,13 @@
-// Medications.js
-
 import React, { useState, useRef } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import MedicationForm from './MedicationForm';
 
+/* 
+So far, the form contains a title, description and a doctor that created the medication
+Need to add doctor comments, assestment, medical insurance information, elder information as well
+
+*/
 const Medications = () => {
     const [medications, setMedications] = useState([
         { title: 'Medication 1', description: 'Description for Medication 1' , doctor: 'Wing Yang'},
