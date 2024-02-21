@@ -1,35 +1,20 @@
+// Medications.js
+
 import React, { useState, useRef } from 'react';
-import { View, ScrollView, Text, StyleSheet, TextInput, Button, TouchableOpacity, Animated } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import MedicationForm from './MedicationForm';
 
 const Medications = () => {
-    // State for managing medications list
     const [medications, setMedications] = useState([
-        { title: 'Medication 1', description: 'Description for Medication 1' },
-        { title: 'Medication 2', description: 'Description for Medication 2' },
-        { title: 'Medication 3', description: 'Description for Medication 3' },
-        { title: 'Medication 4', description: 'Description for Medication 4' },
+        { title: 'Medication 1', description: 'Description for Medication 1' , doctor: 'Wing Yang'},
+        { title: 'Medication 2', description: 'Description for Medication 2', doctor: 'Wing Yang'},
+        { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang' },
+        { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang' },
     ]);
-
-    // State for managing form input
-    const [newMedicationTitle, setNewMedicationTitle] = useState('');
-    const [newMedicationDescription, setNewMedicationDescription] = useState('');
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
-
-    // Animation state
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    // Function to add a new medication
-    const addMedication = () => {
-        if (newMedicationTitle && newMedicationDescription) {
-            setMedications([...medications, { title: newMedicationTitle, description: newMedicationDescription }]);
-            setNewMedicationTitle('');
-            setNewMedicationDescription('');
-            setShowForm(false); 
-        }
-    };
-
-    // Function to toggle form visibility with animation
     const toggleForm = () => {
         fadeAnim.setValue(0);
         setShowForm(!showForm);
@@ -38,7 +23,6 @@ const Medications = () => {
         }
     };
 
-    // Function to animate fade in
     const animateFadeIN = () => {
         Animated.timing(fadeAnim, {
             toValue: 1,
@@ -47,11 +31,9 @@ const Medications = () => {
         }).start();
     };
 
-    // Function to remove a medication
-    const removeMedication = (index) => {
-        const updatedMedications = [...medications];
-        updatedMedications.splice(index, 1);
-        setMedications(updatedMedications);
+    const addMedication = (medicationData) => {
+        setMedications([...medications, medicationData]);
+        setShowForm(false); 
     };
 
     return (
@@ -69,9 +51,7 @@ const Medications = () => {
                             <View style={styles.medicationItem}>
                                 <Text style={styles.medicationTitle}>{medication.title}</Text>
                                 <Text style={styles.medicationDescription}>{medication.description}</Text>
-                                <TouchableOpacity onPress={() => removeMedication(index)}>
-                                    <Text style={styles.removeButton}>Remove</Text>
-                                </TouchableOpacity>
+                                <Text style={styles.medicationDescription}>{medication.doctor}</Text>
                             </View>
                         </View>
                     ))}
@@ -79,19 +59,7 @@ const Medications = () => {
             )}
             {showForm && (
                 <Animated.View style={[styles.formContainer, styles.centeredView, { opacity: fadeAnim }]}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Medication Title"
-                        value={newMedicationTitle}
-                        onChangeText={text => setNewMedicationTitle(text)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Medication Description"
-                        value={newMedicationDescription}
-                        onChangeText={text => setNewMedicationDescription(text)}
-                    />
-                    <Button title="Add Medication" onPress={addMedication} />
+                    <MedicationForm onSubmit={addMedication} />
                 </Animated.View>
             )}
         </View>
@@ -134,19 +102,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 5,
     },
-    removeButton: {
-        color: 'red',
-        marginTop: 5,
-    },
     formContainer: {
         marginTop: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingHorizontal: 10,
     },
     centeredView: {
         alignItems: 'center',
