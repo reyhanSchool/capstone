@@ -8,13 +8,15 @@ import RectangleWithImageBackground from './components/RectangleWithImageBackgro
 import Greeting from './components/WelcomeMessage';
 import Medications from './components/Medications';
 import CalendarScreen from './components/CalendarScreen';
+import LoginScreen from './components/LoginScreen';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Wellness MS" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Medications" component={Medications} />
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
