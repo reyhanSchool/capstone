@@ -4,17 +4,17 @@ import { View, TextInput, Button, StyleSheet } from 'react-native';
 const MedicationForm = ({ onSubmit }) => {
     const [newMedicationTitle, setNewMedicationTitle] = useState('');
     const [newMedicationDescription, setNewMedicationDescription] = useState('');
-    const [PractionerOrder, setNewMedicationPractioner] = useState('');
+    const [practitioner, setPractitioner] = useState('');
 
     const handleAddMedication = () => {
         onSubmit({
             title: newMedicationTitle,
             description: newMedicationDescription,
-            practitioner: PractionerOrder
+            practitioner: practitioner
         });
         setNewMedicationTitle('');
         setNewMedicationDescription('');
-        setNewMedicationPractioner('');
+        setPractitioner('');
     };
 
     return (
@@ -30,12 +30,13 @@ const MedicationForm = ({ onSubmit }) => {
                 placeholder="Medication Description"
                 value={newMedicationDescription}
                 onChangeText={text => setNewMedicationDescription(text)}
+                multiline
             />
             <TextInput
                 style={styles.input}
                 placeholder="Practitioner"
-                value={PractionerOrder}
-                onChangeText={text => setNewMedicationPractioner(text)}
+                value={practitioner}
+                onChangeText={text => setPractitioner(text)}
             />
             <Button title="Add Medication" onPress={handleAddMedication} />
         </View>
@@ -45,13 +46,15 @@ const MedicationForm = ({ onSubmit }) => {
 const styles = StyleSheet.create({
     formContainer: {
         marginTop: 20,
+        paddingHorizontal: 20,
     },
     input: {
         height: 40,
-        borderColor: 'gray',
+        borderColor: '#ccc',
         borderWidth: 1,
-        marginBottom: 10,
+        marginBottom: 20,
         paddingHorizontal: 10,
+        borderRadius: 5,
     },
 });
 

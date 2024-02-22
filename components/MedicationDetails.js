@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const MedicationDetails = ({ route }) => {
     // Extract the medication object from the route parameters
@@ -8,11 +9,28 @@ const MedicationDetails = ({ route }) => {
     // State variables to track edited values
     const [editedDescription, setEditedDescription] = useState(medication.description);
     const [editedDoctor, setEditedDoctor] = useState(medication.doctor);
+    
+    // Function to handle save action
+    const handleSave = () => {
+        // Perform save operation here (e.g., update the medication in the database)
+        console.log("Saving changes...");
+    };
 
     return (
         <View style={styles.container}>
+            {/* Header */}
+            <View style={styles.header}>
+                <Text style={styles.title}>Medication Details</Text>
+                <TouchableOpacity onPress={handleSave}>
+                    <MaterialIcons name="done" size={24} color="black" />
+                </TouchableOpacity>
+            </View>
+            
+            {/* Medication Information */}
             <ScrollView style={styles.scrollView}>
-                <Text style={styles.title}>{medication.title}</Text>
+                <Text style={styles.sectionTitle}>{medication.title}</Text>
+                
+                {/* Description */}
                 <Text style={styles.label}>Description:</Text>
                 <TextInput
                     style={styles.input}
@@ -20,12 +38,21 @@ const MedicationDetails = ({ route }) => {
                     onChangeText={text => setEditedDescription(text)}
                     multiline={true}
                 />
+                
+                {/* Doctor */}
                 <Text style={styles.label}>Doctor:</Text>
                 <TextInput
                     style={styles.input}
                     value={editedDoctor}
                     onChangeText={text => setEditedDoctor(text)}
                 />
+                
+                {/* Additional Information */}
+                <Text style={styles.label}>Dosage:</Text>
+                <Text style={styles.text}>{medication.dosage}</Text>
+                
+                <Text style={styles.label}>Date Prescribed:</Text>
+                <Text style={styles.text}>{medication.DatePrescribed}</Text>
             </ScrollView>
         </View>
     );
@@ -37,24 +64,40 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F2F5',
         padding: 20,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
     title: {
-        fontSize: 28,
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    sectionTitle: {
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
         color: '#333',
     },
     label: {
-        fontSize: 22,
+        fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
         color: '#666',
     },
     input: {
-        fontSize: 18,
+        fontSize: 16,
         marginBottom: 15,
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 5,
+    },
+    text: {
+        fontSize: 16,
+        marginBottom: 10,
+        color: '#333',
     },
     scrollView: {
         flex: 1,

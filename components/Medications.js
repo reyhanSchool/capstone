@@ -3,19 +3,14 @@ import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated } from '
 import { MaterialIcons } from '@expo/vector-icons';
 import MedicationDetails from './MedicationDetails';
 import MedicationForm from './MedicationForm';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-/* 
-So far, the form contains a title, description and a doctor that created the medication
-Need to add doctor comments, assestment, medical insurance information, elder information as well
-
-*/
 const Medications = () => {
     const [medications, setMedications] = useState([
-        { title: 'Medication 1', description: 'Description for Medication 1' , doctor: 'Wing Yang'},
-        { title: 'Medication 2', description: 'Description for Medication 2', doctor: 'Wing Yang'},
-        { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang' },
-        { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang' },
+        { title: 'Medication 1', description: 'Description for Medication 1', doctor: 'Wing Yang', dosage: "2 times per day", DatePrescribed: "Feb 20, 2024" },
+        { title: 'Medication 2', description: 'Description for Medication 2', doctor: 'Wing Yang', dosage: "3 times per day", DatePrescribed: "Feb 20, 2024" },
+        { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang', dosage: "4 times per day", DatePrescribed: "Feb 20, 2024" },
+        { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang', dosage: "1 times per day", DatePrescribed: "Feb 20, 2024" },
     ]);
 
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
@@ -40,11 +35,11 @@ const Medications = () => {
 
     const addMedication = (medicationData) => {
         setMedications([...medications, medicationData]);
-        setShowForm(false); 
+        setShowForm(false);
     };
 
     const viewMedicationDetails = (medication) => {
-        //Navigate from this page to the MedicationDetails which will display all the information about that medication from the database
+        // Navigate to the MedicationDetails screen with the selected medication
         navigation.navigate('MedicationDetails', { medication });
     };
 
@@ -53,7 +48,7 @@ const Medications = () => {
             <View style={styles.header}>
                 <Text style={styles.title}>Medications</Text>
                 <TouchableOpacity onPress={toggleForm}>
-                    <MaterialIcons name={showForm ? "remove" : "add"} size={24} color="black" />
+                    <MaterialIcons name={showForm ? "done" : "add"} size={24} color="black" />
                 </TouchableOpacity>
             </View>
             {!showForm && (
@@ -80,7 +75,6 @@ const Medications = () => {
     );
 };
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -104,18 +98,20 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     medicationItem: {
-        padding: 10,
+        padding: 15,
         borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
+        borderColor: '#ddd',
+        borderRadius: 10,
+        backgroundColor: '#f9f9f9',
     },
     medicationTitle: {
         fontSize: 20,
         fontWeight: 'bold',
+        marginBottom: 5,
     },
     medicationDescription: {
         fontSize: 16,
-        marginTop: 5,
+        color: '#666',
     },
     formContainer: {
         marginTop: 20,
