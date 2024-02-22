@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import MedicationDetails from './MedicationDetails';
 import MedicationForm from './MedicationForm';
+import {useNavigation} from '@react-navigation/native';
 
 /* 
 So far, the form contains a title, description and a doctor that created the medication
@@ -15,8 +17,10 @@ const Medications = () => {
         { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang' },
         { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang' },
     ]);
+
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const navigation = useNavigation();
 
     const toggleForm = () => {
         fadeAnim.setValue(0);
@@ -39,6 +43,11 @@ const Medications = () => {
         setShowForm(false); 
     };
 
+    const viewMedicationDetails = (medication) => {
+        //Navigate from this page to the MedicationDetails which will display all the information about that medication from the database
+        navigation.navigate('MedicationDetails', { medication });
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -50,13 +59,15 @@ const Medications = () => {
             {!showForm && (
                 <ScrollView style={styles.scrollView}>
                     {medications.map((medication, index) => (
-                        <View key={index} style={styles.medicationItemWrapper}>
-                            <View style={styles.medicationItem}>
-                                <Text style={styles.medicationTitle}>{medication.title}</Text>
-                                <Text style={styles.medicationDescription}>{medication.description}</Text>
-                                <Text style={styles.medicationDescription}>{medication.doctor}</Text>
+                        <TouchableOpacity key={index} onPress={() => viewMedicationDetails(medication)}>
+                            <View style={styles.medicationItemWrapper}>
+                                <View style={styles.medicationItem}>
+                                    <Text style={styles.medicationTitle}>{medication.title}</Text>
+                                    <Text style={styles.medicationDescription}>{medication.description}</Text>
+                                    <Text style={styles.medicationDescription}>{medication.doctor}</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </ScrollView>
             )}
@@ -68,6 +79,7 @@ const Medications = () => {
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {

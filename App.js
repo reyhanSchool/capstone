@@ -9,6 +9,7 @@ import Greeting from './components/WelcomeMessage';
 import Medications from './components/Medications';
 import CalendarScreen from './components/CalendarScreen';
 import LoginScreen from './components/LoginScreen';
+import MedicationDetails from './components/MedicationDetails';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Medications" component={Medications} />
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
+        <Stack.Screen name ="MedicationDetails" component={MedicationDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
