@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
 
 const MedicationDetails = ({ route }) => {
     // Extract the medication object from the route parameters
@@ -9,10 +10,14 @@ const MedicationDetails = ({ route }) => {
     // State variables to track edited values
     const [editedDescription, setEditedDescription] = useState(medication.description);
     const [editedDoctor, setEditedDoctor] = useState(medication.doctor);
+    const [editedInstructions, setEditedInstructions] = useState(medication.instructions);
+    const navigation = useNavigation();
     
     // Function to handle save action
     const handleSave = () => {
         // Perform save operation here (e.g., update the medication in the database)
+        //Navigate back to medication page
+        navigation.navigate('Medications');
         console.log("Saving changes...");
     };
 
@@ -22,7 +27,7 @@ const MedicationDetails = ({ route }) => {
             <View style={styles.header}>
                 <Text style={styles.title}>Medication Details</Text>
                 <TouchableOpacity onPress={handleSave}>
-                    <MaterialIcons name="done" size={24} color="black" />
+                    <MaterialIcons name="done" size={24} color="#333" />
                 </TouchableOpacity>
             </View>
             
@@ -50,6 +55,15 @@ const MedicationDetails = ({ route }) => {
                 {/* Additional Information */}
                 <Text style={styles.label}>Dosage:</Text>
                 <Text style={styles.text}>{medication.dosage}</Text>
+
+                <Text style={styles.label}>Instruction:</Text>
+                <TextInput
+                    style={styles.input}
+                    value={editedInstructions}
+                    onChangeText={text => setEditedInstructions(text)}
+                    multiline={true}
+                    textAlignVertical='top'
+                />
                 
                 <Text style={styles.label}>Date Prescribed:</Text>
                 <Text style={styles.text}>{medication.DatePrescribed}</Text>
@@ -102,6 +116,10 @@ const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
     },
+    multlineInput: {
+        minHeight: 100,
+        textAlignVertical: 'top'
+    }
 });
 
 export default MedicationDetails;

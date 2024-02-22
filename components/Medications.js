@@ -1,16 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import MedicationDetails from './MedicationDetails';
 import MedicationForm from './MedicationForm';
 import { useNavigation } from '@react-navigation/native';
 
 const Medications = () => {
     const [medications, setMedications] = useState([
-        { title: 'Medication 1', description: 'Description for Medication 1', doctor: 'Wing Yang', dosage: "2 times per day", DatePrescribed: "Feb 20, 2024" },
-        { title: 'Medication 2', description: 'Description for Medication 2', doctor: 'Wing Yang', dosage: "3 times per day", DatePrescribed: "Feb 20, 2024" },
-        { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang', dosage: "4 times per day", DatePrescribed: "Feb 20, 2024" },
-        { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang', dosage: "1 times per day", DatePrescribed: "Feb 20, 2024" },
+        { title: 'Medication 1', description: 'Description for Medication 1', doctor: 'Wing Yang', dosage: "2 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 1 pill in the morning and the evening with food" },
+        { title: 'Medication 2', description: 'Description for Medication 2', doctor: 'Wing Yang', dosage: "3 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 2 pill in the morning and the evening without food" },
+        { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang', dosage: "4 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 3 pill in the morning and the evening with food" },
+        { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang', dosage: "1 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 4 pill in the morning and the evening without food" },
     ]);
 
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
