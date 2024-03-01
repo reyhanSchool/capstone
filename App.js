@@ -10,6 +10,7 @@ import Medications from './components/Medications';
 import CalendarScreen from './components/CalendarScreen';
 import LoginScreen from './components/LoginScreen';
 import MedicationDetails from './components/MedicationDetails';
+import ElderInfomation from './components/ElderInformation';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ export default function App() {
         <Stack.Screen name="Medications" component={Medications} />
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
         <Stack.Screen name ="MedicationDetails" component={MedicationDetails} />
+        <Stack.Screen name ="ElderInformation" component={ElderInfomation} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -36,6 +38,14 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <Greeting timeOfDay={currentHour} name={name} />
       <View style={styles.content}>
+        <RectangleWithImageBackground 
+        id = "Patient Information"
+        title="Elder Information"
+        imageUrl={require('./assets/statusBackground.png')}
+        color="#CCE9C1"
+        fontSize={35}
+        onPress={() => navigation.navigate('ElderInfomation')} 
+        />
         <RectangleWithImageBackground
           id="Live View"
           title="In Room"
