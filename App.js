@@ -1,8 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 import SquareWithImageBackground from './components/SquareWithImageBackground';
 import RectangleWithImageBackground from './components/RectangleWithImageBackground';
 import Greeting from './components/WelcomeMessage';
@@ -11,6 +12,8 @@ import CalendarScreen from './components/CalendarScreen';
 import LoginScreen from './components/LoginScreen';
 import MedicationDetails from './components/MedicationDetails';
 import ElderInformation from './components/ElderInformation';
+import SettingsScreen from './components/SettingsScreen';
+import AreaSelectionScreen from './components/AreaSelectionScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,11 +22,23 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Wellness MS" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Medications" component={Medications} />
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
         <Stack.Screen name ="MedicationDetails" component={MedicationDetails} />
         <Stack.Screen name="ElderInformation" component={ElderInformation} />
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+                <Ionicons name="settings-outline" size={25} style={{ marginRight: 15 }} />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="AreaSelection" component={AreaSelectionScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

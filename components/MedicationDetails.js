@@ -4,13 +4,25 @@ import { MaterialIcons } from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 
 const MedicationDetails = ({ route }) => {
+    const [selectedDate, setSelectedDate] = useState('');
+
+    const handleDateChange = (date) => {
+      setSelectedDate(date.toDateString()); // You can format the date as needed
+    };
+  
+
     // Extract the medication object from the route parameters
     const { medication } = route.params;
     
     // State variables to track edited values
-    const [editedDescription, setEditedDescription] = useState(medication.description);
-    const [editedDoctor, setEditedDoctor] = useState(medication.doctor);
-    const [editedInstructions, setEditedInstructions] = useState(medication.instructions);
+    const [editedNameofMedication, setNameOfMedication] = useState(medication.NameOfMedication);
+    const [editedDoctor, setEditedDoctor] = useState(medication.PrescribedBy);
+    const [editedInstructions, setEditedInstructions] = useState(medication.Instructions);
+    const [editedDatePrescribed, setDatePrescribed] = useState(medication.DatePrescribed.$currentDate.type);
+    const [editedDosage, setDosage] = useState(medication.Dosage);
+    const [editedRefrigerated, setRefrigerated] = useState(medication.Refrigered);
+    const [editedSideEffects, setSideEffects] = useState(medication.SideEffects);
+
     const navigation = useNavigation();
     
     // Function to handle save action
@@ -25,7 +37,7 @@ const MedicationDetails = ({ route }) => {
         <View style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <Text style={styles.title}>Medication Details</Text>
+                <Text style={styles.title}>Medication Name</Text>
                 <TouchableOpacity onPress={handleSave}>
                     <MaterialIcons name="done" size={24} color="#333" />
                 </TouchableOpacity>
@@ -36,11 +48,11 @@ const MedicationDetails = ({ route }) => {
                 <Text style={styles.sectionTitle}>{medication.title}</Text>
                 
                 {/* Description */}
-                <Text style={styles.label}>Description:</Text>
+                <Text style={styles.label}>Name:</Text>
                 <TextInput
                     style={styles.input}
-                    value={editedDescription}
-                    onChangeText={text => setEditedDescription(text)}
+                    value={editedNameofMedication}
+                    onChangeText={text => setNameOfMedication(text)}
                     multiline={true}
                 />
                 
@@ -50,11 +62,19 @@ const MedicationDetails = ({ route }) => {
                     style={styles.input}
                     value={editedDoctor}
                     onChangeText={text => setEditedDoctor(text)}
+                    multiline={true}
+                    textAlignVertical='top'
                 />
                 
                 {/* Additional Information */}
                 <Text style={styles.label}>Dosage:</Text>
-                <Text style={styles.text}>{medication.dosage}</Text>
+                <TextInput
+                    style={styles.input}
+                    value={editedDosage}
+                    onChangeText={text => setDosage(text)}
+                    multiline={true}
+                    textAlignVertical='top'
+                />
 
                 <Text style={styles.label}>Instruction:</Text>
                 <TextInput
@@ -66,7 +86,8 @@ const MedicationDetails = ({ route }) => {
                 />
                 
                 <Text style={styles.label}>Date Prescribed:</Text>
-                <Text style={styles.text}>{medication.DatePrescribed}</Text>
+                <Text style={styles.text}>{medication.DatePrescribed.$currentDate.type}</Text>
+
             </ScrollView>
         </View>
     );

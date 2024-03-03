@@ -1,17 +1,23 @@
-import React, { useState, useRef } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import MedicationForm from './MedicationForm';
 import { useNavigation } from '@react-navigation/native';
 
 const Medications = () => {
-    const [medications, setMedications] = useState([
-        { title: 'Medication 1', description: 'Description for Medication 1', doctor: 'Wing Yang', dosage: "2 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 1 pill in the morning and the evening with food" },
-        { title: 'Medication 2', description: 'Description for Medication 2', doctor: 'Wing Yang', dosage: "3 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 2 pill in the morning and the evening without food" },
-        { title: 'Medication 3', description: 'Description for Medication 3', doctor: 'Wing Yang', dosage: "4 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 3 pill in the morning and the evening with food" },
-        { title: 'Medication 4', description: 'Description for Medication 4', doctor: 'Wing Yang', dosage: "1 times per day", DatePrescribed: "Feb 20, 2024", instructions: "Take 4 pill in the morning and the evening without food" },
-    ]);
+    const [medications, setMedications] = useState('');
 
+    useEffect(() => {
+        fetch('https://serious-ascent-412517.ue.r.appspot.com/api/medicationList')
+          .then(response => response.json())
+          .then(data => {
+            setMedications(data);
+          })
+          .catch(error => {
+            console.error('Error fetching medication information:', error);
+        });
+      }, []);
+    
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const navigation = useNavigation();
@@ -51,19 +57,23 @@ const Medications = () => {
                 </TouchableOpacity>
             </View>
             {!showForm && (
-                <ScrollView style={styles.scrollView}>
-                    {medications.map((medication, index) => (
-                        <TouchableOpacity key={index} onPress={() => viewMedicationDetails(medication)}>
-                            <View style={styles.medicationItemWrapper}>
-                                <View style={styles.medicationItem}>
-                                    <Text style={styles.medicationTitle}>{medication.title}</Text>
-                                    <Text style={styles.medicationDescription}>{medication.description}</Text>
-                                    <Text style={styles.medicationDescription}>{medication.doctor}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
+                <FlatList style={styles.scrollView}
+        data={medications}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => viewMedicationDetails(item)}>
+            <View style={styles.medicationItemWrapper}>
+              <View style={styles.medicationItem}>
+                <Text style={styles.medicationTitle}>Name of Medication: {item.NameOfMedication}</Text>
+                <Text style={styles.medicationDescription}>Dosage: {item.Dosage}</Text>
+                <Text style={styles.medicationDescription}>Refrigerated: {item.Refrigerated}</Text>
+                <Text style={styles.medicationDescription}>Instructions: {item.Instructions}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+        keyExtractor={item => item._id}
+        contentContainerStyle={{ flexGrow: 1 }} // Ensure the FlatList takes up all available space
+      />
             )}
             {showForm && (
                 <Animated.View style={[styles.formContainer, styles.centeredView, { opacity: fadeAnim }]}>

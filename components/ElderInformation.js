@@ -1,48 +1,39 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 
 const ElderInformation = () => {
-  const elder = {
-    name: "John Doe",
-    age: 75,
-    gender: 'Male',
-    address: '123 Main St, City, State',
-    city: 'Oshawa',
-    province: 'Ontario',
-    email: 'john.doe@example.com',
-    phoneNumber: '1234326543',
-    emergencyContacts: [
-      {
-        name: "Ruby Rose",
-        phoneNumber: "1234567890",
-        address: '432 Rubon Street',
-        city: 'Pickering',
-        province: 'Ontario'
-      },
-      {
-        name: "Brian Erall",
-        phoneNumber: "0987654321",
-        address: '432 Rubon Street',
-        city: 'Whitby',
-        province: 'Ontario'
-      },
-    ]
-  };
+  const [elderInfo, setElderInfo] = useState([]);
+
+  useEffect(() => {
+    fetch('https://serious-ascent-412517.ue.r.appspot.com/api/getElderInfo')
+      .then(response => response.json())
+      .then(data => {
+        setElderInfo(data);
+      })
+      .catch(error => {
+        console.error('Error fetching elder information:', error);
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Elder Information</Text>
-      <View style={styles.infoContainer}>
-        <SquareWithColor title="Name" value={elder.name} color="#FFA07A" />
-        <SquareWithColor title="Age" value={elder.age.toString()} color="#87CEEB" />
-        <SquareWithColor title="Gender" value={elder.gender} color="#90EE90" />
-        <SquareWithColor title="Address" value={elder.address} color="#FFD700" />
-        <SquareWithColor title="Email" value={elder.email} color="#FF69B4" />
-        <SquareWithColor title="Emergency Contacts" color="#00FFFF" onPress={() => handleEmergencyContactsPress(elder.emergencyContacts)} />
-      </View>
+      <FlatList
+        data={elderInfo}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text>Name: {item.FirstName} {item.LastName}</Text>
+            <Text>Age: {item.Age}</Text>
+            <Text>Address: {item.Address}</Text>
+            <Text>Contact: {item.PhoneNumer}</Text>
+            <Text>Gender: {item.Gender}</Text>
+          </View>
+        )}
+        keyExtractor={item => item._id}
+      />
     </View>
   );
-}
+};
 
 const SquareWithColor = ({ title, value, color, onPress }) => (
   <TouchableOpacity onPress={onPress}>
