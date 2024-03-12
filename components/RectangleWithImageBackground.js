@@ -9,9 +9,6 @@ const RectangleWithImageBackground = ({id, title, imageUrl, color, fontSize }) =
     if (id === "Appointments") {
       navigation.navigate('CalendarScreen');
     }
-    else if(id === "Live View"){
-      navigation.navigate('Medications') //Need to create the live view page
-    }
     else if (id === "Elder Information"){
       navigation.navigate('ElderInformation')
     }
