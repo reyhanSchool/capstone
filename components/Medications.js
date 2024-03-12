@@ -18,7 +18,7 @@ const Medications = () => {
             console.error('Error fetching medication information:', error);
         });
         
-      }, [isFocused]);
+      }, []);
     
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
     const fadeAnim = useRef(new Animated.Value(0)).current;

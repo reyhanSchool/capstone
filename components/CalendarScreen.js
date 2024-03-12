@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation, NavigationContainer } from '@react-navigation/native';
 
 const CalendarScreen = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -12,7 +13,7 @@ const CalendarScreen = () => {
 
   const currentYear = new Date().getFullYear();
   const yearsArray = Array.from({ length: 100 }, (_, index) => currentYear - index);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
 
@@ -66,11 +67,13 @@ const CalendarScreen = () => {
       </TouchableOpacity>
     );
   };
-
+  const handleNewAppointment = () => {
+    navigation.navigate('AddAppointment');
+  };
   const renderAppointmentsForSelectedDate = () => {
     const selectedAppointments = appointments.filter(appointment => {
       const [monthStr, dayStr, yearStr] = appointment.date.split(', ');
-      const month = new Date(Date.parse(monthStr + ' 1, 2000')).getMonth(); // Convert month name to month index
+      const month = new Date(Date.parse(monthStr + ' 1, 2000')).getMonth(); 
       const day = parseInt(dayStr);
       const year = parseInt(yearStr);
       
@@ -81,6 +84,9 @@ const CalendarScreen = () => {
       );
     });
     
+
+
+
     return selectedAppointments.map(appointment => (
       <View key={appointment.id}>
         <Text>{appointment.nameOfAppointment}</Text>
@@ -143,7 +149,7 @@ const CalendarScreen = () => {
           <Text></Text>
           <Button title="Back" onPress={handleBackButtonPress} />
           <Text></Text>
-          <Button title="New Appointment" onPress={'CreateNewAppointment'} />
+          <Button title="New Appointment" onPress={handleNewAppointment} />
         </Animated.View>
       )}
     </ScrollView>

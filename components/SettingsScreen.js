@@ -9,7 +9,7 @@ export default function SettingsScreen({ navigation }) {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>GENERAL</Text>
         <SettingsItem title="Account" iconName="person-outline" onPress={() => {}} />
-        <SettingsItem title="Notifications" iconName="notifications-outline" onPress={() => {}} />
+        <SettingsItem title="Notifications" iconName="notifications-outline" onPress={() => navigation.navigate('Notifications')} />
         <SettingsItem title="Area Selection" iconName="home-outline" onPress={() => navigation.navigate('AreaSelection')} />
         <SettingsItem title="Logout" iconName="log-out-outline" onPress={() => navigation.navigate('Wellness MS')} />
         <SettingsItem title="Delete account" iconName="trash-outline" onPress={() => {}} />

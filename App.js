@@ -15,6 +15,8 @@ import MedicationDetails from './components/MedicationDetails';
 import ElderInformation from './components/ElderInformation';
 import SettingsScreen from './components/SettingsScreen';
 import AreaSelectionScreen from './components/AreaSelectionScreen';
+import AddAppointment from './components/CreateNewAppointment';
+import NotificationSettings from './components/NotificationsSettings';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +30,9 @@ export default function App() {
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
         <Stack.Screen name ="MedicationDetails" component={MedicationDetails} />
         <Stack.Screen name="ElderInformation" component={ElderInformation} />
+        <Stack.Screen name="AddAppointment" component={AddAppointment}
+        options={({ navigation }) => ({
+          headerLeft: null,})} />
         <Stack.Screen name="Home" component={HomeScreen} 
           options={({ navigation }) => ({
             headerLeft: null,
@@ -40,6 +45,8 @@ export default function App() {
         />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="AreaSelection" component={AreaSelectionScreen} />
+        <Stack.Screen name="Notifications" component={NotificationSettings} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -91,11 +98,10 @@ function HomeScreen({ navigation }) {
       <RectangleWithImageBackground
           id="Elder Information" 
           title="Elder Information" 
-          imageUrl={require('./assets/statusBackground.png')} 
-          color="#FFCA99"
+          imageUrl={require('./assets/personIcon.png')} 
+          color="#a7d0fc"
           fontSize={25}
           onPress={() => navigation.navigate('ElderInformation')} />
-
         <RectangleWithImageBackground
           id="Live View"
           title={status}

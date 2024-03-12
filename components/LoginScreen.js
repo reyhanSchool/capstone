@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, Keyboard   } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -34,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
     }
   };
   return (
-
+    
     <View style={styles.linearGradient}>
       
       <View style={styles.gradient}>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 50,
-    paddingBottom: 300,
+    paddingBottom: 200,
     backgroundColor: 'white',
   },
   title: {
