@@ -32,12 +32,30 @@ export default function AreaSelectionScreen() {
 
   const saveGridState = async () => {
     try {
+      // Save to AsyncStorage
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(selectedCells));
-      Alert.alert('Success', 'Your grid state has been saved successfully.');
+      Alert.alert('Success', 'Your grid state has been saved locally.');
+  
+      // Now submit the same data to your server
+      const response = await fetch('https://serious-ascent-412517.ue.r.appspot.com/api/submitAreaSelection', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ selectedCells: selectedCells }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert('Success', 'Your area selection has been submitted successfully.');
+      } else {
+        Alert.alert('Error', `Failed to submit area selection: ${data.message}`);
+      }
     } catch (error) {
-      Alert.alert("Error", "Failed to save the grid state.");
+      Alert.alert('Error', `Failed to save the grid state: ${error.message}`);
     }
   };
+  
 
   const resetGridState = async () => {
     try {
