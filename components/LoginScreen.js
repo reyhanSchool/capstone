@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    
   },
   gradient: {
     width: '100%',
@@ -83,6 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 50,
+    paddingBottom: 300,
     backgroundColor: 'white',
   },
   title: {
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
     borderRadius: 5,
-    
   },
   image: {
     width: 400, // Set the width of the image
