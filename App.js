@@ -90,7 +90,6 @@ function HomeScreen({ navigation }) {
           imageUrl={require('./assets/statusBackground.png')}
           color="#CCE9C1"
           fontSize={35}
-          //onPress={() => navigation.navigate('CalendarScreen')} 
         />
         <View style={styles.row}>
           <SquareWithImageBackground
