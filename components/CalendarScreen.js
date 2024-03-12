@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
@@ -8,9 +8,23 @@ const CalendarScreen = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [isCalendarCollapsed, setIsCalendarCollapsed] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [appointments, setAppointments] = useState([]);
 
   const currentYear = new Date().getFullYear();
   const yearsArray = Array.from({ length: 100 }, (_, index) => currentYear - index);
+
+  useEffect(() => {
+    const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        setAppointments(data);
+      })
+      .catch(error => {
+        console.error('Error fetching Appointment information:', error);
+      });
+  }, []);
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
@@ -34,7 +48,6 @@ const CalendarScreen = () => {
     }).start();
   };
 
- 
   const generateDatesArray = () => {
     const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
     const datesArray = [];
@@ -54,6 +67,33 @@ const CalendarScreen = () => {
     );
   };
 
+  const renderAppointmentsForSelectedDate = () => {
+    const selectedAppointments = appointments.filter(appointment => {
+      const [monthStr, dayStr, yearStr] = appointment.date.split(', ');
+      const month = new Date(Date.parse(monthStr + ' 1, 2000')).getMonth(); // Convert month name to month index
+      const day = parseInt(dayStr);
+      const year = parseInt(yearStr);
+      
+      return (
+        day === selectedDate &&
+        month === selectedMonth &&
+        year === selectedYear
+      );
+    });
+    
+    return selectedAppointments.map(appointment => (
+      <View key={appointment.id}>
+        <Text>{appointment.nameOfAppointment}</Text>
+        <Text>{appointment.doctor}</Text>
+        <Text>{appointment.time}</Text>
+        <Text>{appointment.location}</Text>
+        <Text>{appointment.address}</Text>
+        <Text>{appointment.phoneNumber}</Text>
+        <Text>{appointment.additionalNotes}</Text>
+      </View>
+    ));
+  };
+  
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -92,17 +132,18 @@ const CalendarScreen = () => {
           {generateDatesArray().map(date => renderDateCell(date))}
         </View>
       )}
-
+      
       {selectedDate && isCalendarCollapsed && (
         <Animated.View style={[styles.selectedDateContainer, { opacity: fadeAnim }]}>
           <Text style={styles.selectedDateText}>
             Selected Date: {selectedDate}/{selectedMonth + 1}/{selectedYear}
           </Text>
           <Text style={styles.eventsText}>Events for {selectedDate}/{selectedMonth + 1}/{selectedYear}:</Text>
-          <Text style={styles.eventsText}>Event 1</Text>
-          <Text style={styles.eventsText}>Event 2</Text>
-
+          {renderAppointmentsForSelectedDate()}
+          <Text></Text>
           <Button title="Back" onPress={handleBackButtonPress} />
+          <Text></Text>
+          <Button title="New Appointment" onPress={'CreateNewAppointment'} />
         </Animated.View>
       )}
     </ScrollView>

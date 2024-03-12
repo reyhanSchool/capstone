@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const RectangleWithImageBackground = ({id, title, imageUrl, color, fontSize }) => {
+const RectangleWithImageBackground = ({id, title, subtitle, imageUrl, color, fontSize }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -21,6 +21,7 @@ const RectangleWithImageBackground = ({id, title, imageUrl, color, fontSize }) =
           </ImageBackground>
           <View style={styles.titleContainer}>
             <Text style={[styles.title, { fontSize: fontSize }]}>{title}</Text>
+            <Text style={styles.subtitle}>{subtitle}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -56,6 +57,10 @@ const styles = StyleSheet.create({
       title: {
         color: 'black',
         opacity: 1, // Make the title text fully opaque
+      },
+      subtitle: {
+        fontSize: 12, // smaller font size for subtitle
+        color: 'grey' // a neutral color for the subtitle
       },
 });
 

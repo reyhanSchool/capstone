@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Animated, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import MedicationForm from './MedicationForm';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, isFocused } from '@react-navigation/native';
 
 const Medications = () => {
     const [medications, setMedications] = useState('');
 
     useEffect(() => {
+        
         fetch('https://serious-ascent-412517.ue.r.appspot.com/api/medicationList')
           .then(response => response.json())
           .then(data => {
@@ -16,7 +17,8 @@ const Medications = () => {
           .catch(error => {
             console.error('Error fetching medication information:', error);
         });
-      }, []);
+        
+      }, [isFocused]);
     
     const [showForm, setShowForm] = useState(false); // State variable to control form visibility
     const fadeAnim = useRef(new Animated.Value(0)).current;

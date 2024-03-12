@@ -30,6 +30,7 @@ export default function App() {
         <Stack.Screen name="ElderInformation" component={ElderInformation} />
         <Stack.Screen name="Home" component={HomeScreen} 
           options={({ navigation }) => ({
+            headerLeft: null,
             headerRight: () => (
               <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                 <Ionicons name="settings-outline" size={25} style={{ marginRight: 15 }} />
@@ -55,22 +56,33 @@ function HomeScreen({ navigation }) {
 
   const formatDate = (isoString) => {
     const date = new Date(isoString);
-    return date.toLocaleString(); // Converts to local date and time format
+    // Get the time part only, in a human-readable format.
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   };
+  
 
   useEffect(() => {
-    fetch('https://serious-ascent-412517.ue.r.appspot.com/api/checkStatus')
-      .then((response) => response.json())
-      .then((data) => {
-        setStatus(data.status);
-        // Convert and format the timestamp
-        setTimestamp(formatDate(data.timestamp));
-      })
-      .catch((error) => {
-        console.error('Error fetching status:', error);
-        setStatus('Status unavailable');
-      });
+    const fetchStatus = () => {
+      fetch('https://serious-ascent-412517.ue.r.appspot.com/api/checkStatus')
+        .then((response) => response.json())
+        .then((data) => {
+          setStatus(data.status);
+          setTimestamp(formatDate(data.timestamp));
+        })
+        .catch((error) => {
+          console.error('Error fetching status:', error);
+          setStatus('Status unavailable');
+        });
+    };
+
+    fetchStatus(); // Fetch status immediately on component mount
+
+    const interval = setInterval(fetchStatus, 5000); // Fetch status every 5 seconds
+
+    return () => clearInterval(interval); // Clear the interval when component is unmounted
   }, []);
+  
+  
 
   return (
     <View style={styles.container}>
@@ -86,7 +98,8 @@ function HomeScreen({ navigation }) {
 
         <RectangleWithImageBackground
           id="Live View"
-          title={`${status} - ${timestamp}`} 
+          title={status}
+          subtitle={`Last updated: ${timestamp}`} 
           imageUrl={require('./assets/statusBackground.png')}
           color="#CCE9C1"
           fontSize={35}
@@ -101,10 +114,10 @@ function HomeScreen({ navigation }) {
           />
           <SquareWithImageBackground
             id="Medication"
-            title="2 left"
+            title="Medications"
             imageUrl={require('./assets/pillBackground.png')}
             color="#FFCA99"
-            fontSize={25}
+            fontSize={20}
             onPress={() => navigation.navigate('Medications')} 
           />
         </View>
