@@ -53,13 +53,18 @@ function HomeScreen({ navigation }) {
   const [status, setStatus] = useState('Fetching status...');
   const [timestamp, setTimestamp] = useState('');
 
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleString(); // Converts to local date and time format
+  };
+
   useEffect(() => {
     fetch('https://serious-ascent-412517.ue.r.appspot.com/api/checkStatus')
       .then((response) => response.json())
       .then((data) => {
         setStatus(data.status);
-        // Parse and format the timestamp here if needed
-        setTimestamp(data.timestamp);
+        // Convert and format the timestamp
+        setTimestamp(formatDate(data.timestamp));
       })
       .catch((error) => {
         console.error('Error fetching status:', error);
@@ -81,11 +86,11 @@ function HomeScreen({ navigation }) {
 
         <RectangleWithImageBackground
           id="Live View"
-          title={status}
+          title={`${status} - ${timestamp}`} 
           imageUrl={require('./assets/statusBackground.png')}
           color="#CCE9C1"
           fontSize={35}
-          onPress={() => navigation.navigate('CalendarScreen')} 
+          //onPress={() => navigation.navigate('CalendarScreen')} 
         />
         <View style={styles.row}>
           <SquareWithImageBackground
