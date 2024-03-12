@@ -63,10 +63,10 @@ const Medications = () => {
           <TouchableOpacity onPress={() => viewMedicationDetails(item)}>
             <View style={styles.medicationItemWrapper}>
               <View style={styles.medicationItem}>
-                <Text style={styles.medicationTitle}>Name of Medication: {item.NameOfMedication}</Text>
-                <Text style={styles.medicationDescription}>Dosage: {item.Dosage}</Text>
-                <Text style={styles.medicationDescription}>Refrigerated: {item.Refrigerated}</Text>
-                <Text style={styles.medicationDescription}>Instructions: {item.Instructions}</Text>
+                <Text style={styles.medicationTitle}>Name of Medication: {item.title}</Text>
+                <Text style={styles.medicationDescription}>Dosage: {item.dosage}</Text>
+                <Text style={styles.medicationDescription}>Refrigerated: {item.refrigerated}</Text>
+                <Text style={styles.medicationDescription}>Instructions: {item.instructions}</Text>
               </View>
             </View>
           </TouchableOpacity>

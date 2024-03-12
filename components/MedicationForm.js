@@ -76,12 +76,6 @@ const MedicationForm = ({ onSubmit }) => {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Refrigerated"
-                value={refrigerated}
-                onChangeText={text => setRefrigerated(text)}
-            />
-            <TextInput
-                style={styles.input}
                 placeholder="Instructions"
                 value={instructions}
                 onChangeText={text => setInstructions(text)}
@@ -92,7 +86,15 @@ const MedicationForm = ({ onSubmit }) => {
                 value={sideEffects}
                 onChangeText={text => setSideEffects(text)}
             />
-            
+            <View style={styles.switchContainer}>
+                <Text>Refrigerated</Text>
+                <Switch
+                    value={refrigerated}
+                    onValueChange={value => setRefrigerated(value)}
+                    thumbColor={refrigerated ? 'blue' : 'grey'} // Change thumb color based on state
+                    trackColor={{ false: 'grey', true: 'lightblue' }} // Change track color based on state
+                />
+            </View>
             <Button title="Add Medication" onPress={handleAddMedication} />
         </View>
     );
@@ -110,6 +112,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingHorizontal: 5,
         borderRadius: 5,
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
     },
 });
 
