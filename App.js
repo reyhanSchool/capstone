@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,6 +18,7 @@ import AreaSelectionScreen from './components/AreaSelectionScreen';
 
 const Stack = createStackNavigator();
 
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -26,9 +28,7 @@ export default function App() {
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
         <Stack.Screen name ="MedicationDetails" component={MedicationDetails} />
         <Stack.Screen name="ElderInformation" component={ElderInformation} />
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
+        <Stack.Screen name="Home" component={HomeScreen} 
           options={({ navigation }) => ({
             headerRight: () => (
               <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
@@ -47,7 +47,25 @@ export default function App() {
 function HomeScreen({ navigation }) {
   const currentTime = new Date();
   const currentHour = currentTime.getHours();
-  const name = 'Nived';
+  const name = 'Caretaker';
+
+
+  const [status, setStatus] = useState('Fetching status...');
+  const [timestamp, setTimestamp] = useState('');
+
+  useEffect(() => {
+    fetch('https://serious-ascent-412517.ue.r.appspot.com/api/checkStatus')
+      .then((response) => response.json())
+      .then((data) => {
+        setStatus(data.status);
+        // Parse and format the timestamp here if needed
+        setTimestamp(data.timestamp);
+      })
+      .catch((error) => {
+        console.error('Error fetching status:', error);
+        setStatus('Status unavailable');
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -60,9 +78,10 @@ function HomeScreen({ navigation }) {
           color="#FFCA99"
           fontSize={25}
           onPress={() => navigation.navigate('ElderInformation')} />
+
         <RectangleWithImageBackground
           id="Live View"
-          title="In Room"
+          title={status}
           imageUrl={require('./assets/statusBackground.png')}
           color="#CCE9C1"
           fontSize={35}
