@@ -113,7 +113,7 @@ function HomeScreen({ navigation }) {
         <View style={styles.row}>
           <SquareWithImageBackground
             id="Temperature Log"
-            title="34°"
+            title="27°"
             imageUrl={require('./assets/thermBackground.png')}
             color="#E5B9FA"
             fontSize={45}
