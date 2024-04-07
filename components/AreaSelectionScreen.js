@@ -30,6 +30,11 @@ export default function AreaSelectionScreen() {
 
   const selectedItemRef = useRef(selectedItem);
 
+  useEffect(() => {
+    selectedItemRef.current = selectedItem;
+  }, [selectedItem]);
+  
+
   const saveGridState = async () => {
     try {
       // Save to AsyncStorage
@@ -145,14 +150,18 @@ export default function AreaSelectionScreen() {
         <Button title="Reset Grid State" onPress={resetGridState} color="red" />
       </View>
       <View style={styles.dropdownContainer}>
-        <Picker
-          selectedValue={selectedItem}
-          style={styles.picker}
-          onValueChange={(itemValue, itemIndex) => setSelectedItem(itemValue)}
-        >
-          <Picker.Item label="Bed" value="bed" />
-          <Picker.Item label="Door" value="door" />
-        </Picker>
+      <Picker
+  selectedValue={selectedItem}
+  style={styles.picker}
+  onValueChange={(itemValue, itemIndex) => {
+    selectedItemRef.current = itemValue; // Update the ref immediately
+    setSelectedItem(itemValue); // Then update the state
+  }}
+>
+  <Picker.Item label="Bed" value="bed" />
+  <Picker.Item label="Door" value="door" />
+</Picker>
+
       </View>
     </View>
   );

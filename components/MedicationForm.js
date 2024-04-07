@@ -32,8 +32,6 @@ const MedicationForm = ({ onSubmit }) => {
             console.log(data)
             console.log(response.ok)
             if (response.ok) {
-                // Call the onSubmit prop if insertion was successful
-                onSubmit(data);
                 // Clear the form fields after successful submission
                 setNewMedicationTitle('');
                 setDosage('');

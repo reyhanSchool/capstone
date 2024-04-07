@@ -48,7 +48,6 @@ const AddNewAppointment = async () => {
                 console.log(data)
                 console.log(response.ok)
                 if (response.ok){
-                    onSubmit(data)
                     navigation.navigate('CalendarScreen')
                 }else{
                     console.error('Failed to Add New Appointment', data.message)

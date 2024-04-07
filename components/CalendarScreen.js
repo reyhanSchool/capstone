@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated } from 'react-native';
+import { Alert, View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation, NavigationContainer } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const CalendarScreen = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -14,18 +16,24 @@ const CalendarScreen = () => {
   const currentYear = new Date().getFullYear();
   const yearsArray = Array.from({ length: 100 }, (_, index) => currentYear - index);
   const navigation = useNavigation();
-  useEffect(() => {
+  useFocusEffect(
+  React.useCallback(() => {
     const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
 
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         setAppointments(data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching Appointment information:', error);
-      });
-  }, []);
+      }
+    };
+
+    fetchAppointments();
+  }, [])
+);
+
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
@@ -75,35 +83,80 @@ const CalendarScreen = () => {
     });
 
   };
+
+
+
   const renderAppointmentsForSelectedDate = () => {
     const selectedAppointments = appointments.filter(appointment => {
-      const [monthStr, dayStr, yearStr] = appointment.date.split(', ');
-      const month = new Date(Date.parse(monthStr + ' 1, 2000')).getMonth(); 
-      const day = parseInt(dayStr);
-      const year = parseInt(yearStr);
-      
+      // Assuming date format from API is "D/M/YYYY"
+      const [day, month, year] = appointment.date.split('/').map(Number);
+      // Correcting month index since JavaScript months are 0-indexed
+      const correctedMonth = month - 1;
+  
       return (
         day === selectedDate &&
-        month === selectedMonth &&
+        correctedMonth === selectedMonth &&
         year === selectedYear
       );
     });
-    
-
-
-
-    return selectedAppointments.map(appointment => (
-      <View key={appointment.id}>
-        <Text>{appointment.nameOfAppointment}</Text>
-        <Text>{appointment.doctor}</Text>
-        <Text>{appointment.time}</Text>
-        <Text>{appointment.location}</Text>
-        <Text>{appointment.address}</Text>
-        <Text>{appointment.phoneNumber}</Text>
-        <Text>{appointment.additionalNotes}</Text>
+  
+    return selectedAppointments.map((appointment, index) => (
+      <View key={index} style={styles.appointmentContainer}>
+        <Text>Name of Appointment: {appointment.nameOfAppointment}</Text>
+        <Text>Doctor: {appointment.doctor}</Text>
+        <Text>Time: {appointment.time}</Text>
+        <Text>Location: {appointment.location}</Text>
+        <Text>Address: {appointment.address}</Text>
+        <Text>Phone Number: {appointment.phoneNumber}</Text>
+        <Text>Additional Notes: {appointment.additionalNotes}</Text>
+        <Button 
+      title="Delete" 
+      onPress={() => handleDeleteAppointment(appointment.nameOfAppointment)}
+      color="red"
+    />
       </View>
     ));
   };
+
+
+  const handleDeleteAppointment = async (nameOfAppointment) => {
+    try {
+      const apiUrl = `https://serious-ascent-412517.ue.r.appspot.com/api/deleteAppointmentByName/${nameOfAppointment}`;
+      const response = await fetch(apiUrl, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        Alert.alert("Success", "Appointment deleted successfully");
+        fetchAppointments(); // Refresh the appointments list
+      } else {
+        Alert.alert("Error", data.message || "Failed to delete the appointment");
+      }
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+      Alert.alert("Error", "An unexpected error occurred");
+    }
+  };
+  
+  
+  const fetchAppointments = async () => {
+    try {
+      const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      setAppointments(data);
+    } catch (error) {
+      console.error('Error fetching Appointment information:', error);
+    }
+  };
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAppointments();
+    }, [])
+  );
+  
+  
   
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -210,6 +263,12 @@ const styles = StyleSheet.create({
   eventsText: {
     fontSize: 16,
   },
+appointmentContainer: {
+  borderWidth: 1,
+  borderColor: '#ccc',
+  padding: 10,
+  marginVertical: 5,
+}
 });
 
 export default CalendarScreen;

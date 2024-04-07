@@ -67,7 +67,6 @@ const Medications = () => {
               <View style={styles.medicationItem}>
                 <Text style={styles.medicationTitle}>Name of Medication: {item.title}</Text>
                 <Text style={styles.medicationDescription}>Dosage: {item.dosage}</Text>
-                <Text style={styles.medicationDescription}>Refrigerated: {item.refrigerated}</Text>
                 <Text style={styles.medicationDescription}>Instructions: {item.instructions}</Text>
               </View>
             </View>

@@ -39,7 +39,7 @@ const LoginScreen = ({ navigation }) => {
       
       <View style={styles.gradient}>
       <Image style={styles.image}
-        source={require('./logo.png')} // Replace with the path to your image
+        source={require('./logo2.png')} // Replace with the path to your image
       />
         <TextInput
           style={styles.input}
@@ -119,9 +119,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   image: {
-    width: 400, // Set the width of the image
-    height: 150, // Set the height of the image
+    width: 280, // Set the width of the image
+    height: 65, // Set the height of the image
     resizeMode: 'cover', // Set the resizeMode (cover, contain, stretch, etc.)
+    marginBottom: 20,
   },
 });
 
