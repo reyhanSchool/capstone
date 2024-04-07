@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated, TextInput } from 'react-native';
+import { Alert, View, ScrollView, Text, StyleSheet, TouchableOpacity, Button, Animated, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation, NavigationContainer } from '@react-navigation/native';
+import { useNavigation, NavigationContainer, useRoute } from '@react-navigation/native';
 
 const CreateNewAppointment =  ({ onSubmit }) => {
     const navigation  = useNavigation();
-    const [newDate, setNewDate] = useState('');
     const [doctor, setDoctor] = useState('');
     const [appointmentName, setAppointmentName] = useState('');
     const [time, setTime] = useState('');
@@ -13,11 +12,51 @@ const CreateNewAppointment =  ({ onSubmit }) => {
     const [address, setAddress] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [additionNotes, setAdditionNotes] = useState('');
-
+    const route = useRoute();
+    const {selectedDate, selectedMonth, selectedYear} = route.params;
+    const newdate = `${selectedDate.toString()}/${(selectedMonth + 1).toString()}/${selectedYear.toString()}`;
     //Inserting appointment into the database
 const AddNewAppointment = async () => {
-    const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/postAppointmentInfo';
-        
+    if (
+        appointmentName.trim() === '' ||
+        doctor.trim() === '' ||
+        time.trim() === '' ||
+        location.trim() === '' ||
+        address.trim() === '' ||
+        phoneNumber.trim() === '' 
+        ){
+        Alert.alert('All Fields Is Mandatory');
+        }else{
+            try{
+                const response = await fetch('https://serious-ascent-412517.ue.r.appspot.com/api/postAppointmentInfo',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        date: newdate,
+                        doctor: doctor,
+                        nameOfAppointment: appointmentName,
+                        time: time,
+                        location: location,
+                        address: address,
+                        phoneNumber: phoneNumber,
+                        additionalNotes: additionNotes,
+                    }),
+                })
+                const data = await response.json();
+                console.log(data)
+                console.log(response.ok)
+                if (response.ok){
+                    onSubmit(data)
+                    navigation.navigate('CalendarScreen')
+                }else{
+                    console.error('Failed to Add New Appointment', data.message)
+                }
+            }catch(error){
+                console.error('Error inserting appointment:', error);
+            }
+        }//outer else statement
 };
 
 const handleBackButtonToCalendar = () => {
@@ -29,8 +68,8 @@ return (
         <TextInput
                 style={styles.input}
                 placeholder="Date"
-                value={newDate}
-                onChangeText={text => setNewDate(text)}
+                value={`${selectedDate}/${selectedMonth + 1}/${selectedYear}`}
+                editable={false}
         />
         <TextInput
                 style={styles.input}
@@ -74,7 +113,7 @@ return (
                 value={additionNotes}
                 onChangeText={text => setAdditionNotes(text)}
         />
-        <Button title="Save" onPress={''}/>
+        <Button title="Save" onPress={AddNewAppointment}/>
         <Text/>
         <Button title="Back" onPress={handleBackButtonToCalendar} />
 

@@ -68,7 +68,12 @@ const CalendarScreen = () => {
     );
   };
   const handleNewAppointment = () => {
-    navigation.navigate('AddAppointment');
+    navigation.navigate('AddAppointment', {
+      selectedDate,
+      selectedMonth,
+      selectedYear
+    });
+
   };
   const renderAppointmentsForSelectedDate = () => {
     const selectedAppointments = appointments.filter(appointment => {
