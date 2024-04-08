@@ -15,38 +15,26 @@ const ElderInformation = () => {
       });
   }, []);
 
+  const renderElderInfoItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>Name: {item.FirstName} {item.LastName}</Text>
+      <Text style={styles.itemText}>Age: {item.Age}</Text>
+      <Text style={styles.itemText}>Address: {item.Address}</Text>
+      <Text style={styles.itemText}>Contact: {item.PhoneNumer}</Text>
+      <Text style={styles.itemText}>Gender: {item.Gender}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Elder Information</Text>
       <FlatList
         data={elderInfo}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>Name: {item.FirstName} {item.LastName}</Text>
-            <Text>Age: {item.Age}</Text>
-            <Text>Address: {item.Address}</Text>
-            <Text>Contact: {item.PhoneNumer}</Text>
-            <Text>Gender: {item.Gender}</Text>
-          </View>
-        )}
+        renderItem={renderElderInfoItem}
         keyExtractor={item => item._id}
       />
     </View>
   );
-};
-
-const SquareWithColor = ({ title, value, color, onPress }) => (
-  <TouchableOpacity onPress={onPress}>
-    <View style={[styles.square, { backgroundColor: color }]}>
-      <Text style={styles.label}>{title}</Text>
-      <Text style={styles.value}>{value}</Text>
-    </View>
-  </TouchableOpacity>
-);
-
-const handleEmergencyContactsPress = (emergencyContacts) => {
-  // Handle the press event for the Emergency Contacts square here
-  console.log("Emergency Contacts Clicked:", emergencyContacts);
 };
 
 const styles = StyleSheet.create({
@@ -67,28 +55,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333',
   },
-  infoContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  square: {
-    width: '48%', // Adjust the width to occupy half of the container
-    aspectRatio: 1, // Ensures a square shape
-    justifyContent: 'center',
-    alignItems: 'center',
+  item: {
+    backgroundColor: '#fff',
+    padding: 20,
+    marginBottom: 10,
     borderRadius: 10,
-    marginBottom: 20,
   },
-  label: {
+  itemText: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 5,
-    color: '#fff',
-  },
-  value: {
-    fontSize: 14,
-    color: '#fff',
+    color: '#333',
   },
 });
 

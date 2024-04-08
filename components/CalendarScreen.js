@@ -4,7 +4,6 @@ import { Picker } from '@react-native-picker/picker';
 import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 
-
 const CalendarScreen = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
@@ -16,24 +15,24 @@ const CalendarScreen = () => {
   const currentYear = new Date().getFullYear();
   const yearsArray = Array.from({ length: 100 }, (_, index) => currentYear - index);
   const navigation = useNavigation();
+
   useFocusEffect(
-  React.useCallback(() => {
-    const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
+    React.useCallback(() => {
+      const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
 
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        setAppointments(data);
-      } catch (error) {
-        console.error('Error fetching Appointment information:', error);
-      }
-    };
+      const fetchAppointments = async () => {
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+          setAppointments(data);
+        } catch (error) {
+          console.error('Error fetching Appointment information:', error);
+        }
+      };
 
-    fetchAppointments();
-  }, [])
-);
-
+      fetchAppointments();
+    }, [])
+  );
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
@@ -67,24 +66,32 @@ const CalendarScreen = () => {
   };
 
   const renderDateCell = (date) => {
+
+    //Check if there any functions for the selected month
+    const hasAppointments = appointments.some(appointment => {
+      const [day, month, year] = appointment.date.split('/').map(Number);
+      const correctedMonth = month - 1; // JavaScript months are 0-indexed
+      return day === date && correctedMonth === selectedMonth && year === selectedYear;
+    });
+
+    const cellStyle = hasAppointments ? styles.dateCellWithAppoinntment : styles.dateCell;
+
     return (
       <TouchableOpacity key={date} onPress={() => handleDateSelection(date)}>
-        <View style={styles.dateCell}>
+        <View style={cellStyle}>
           <Text style={styles.dateText}>{date}</Text>
         </View>
       </TouchableOpacity>
     );
   };
+
   const handleNewAppointment = () => {
     navigation.navigate('AddAppointment', {
       selectedDate,
       selectedMonth,
       selectedYear
     });
-
   };
-
-
 
   const renderAppointmentsForSelectedDate = () => {
     const selectedAppointments = appointments.filter(appointment => {
@@ -92,14 +99,14 @@ const CalendarScreen = () => {
       const [day, month, year] = appointment.date.split('/').map(Number);
       // Correcting month index since JavaScript months are 0-indexed
       const correctedMonth = month - 1;
-  
+
       return (
         day === selectedDate &&
         correctedMonth === selectedMonth &&
         year === selectedYear
       );
     });
-  
+
     return selectedAppointments.map((appointment, index) => (
       <View key={index} style={styles.appointmentContainer}>
         <Text>Name of Appointment: {appointment.nameOfAppointment}</Text>
@@ -109,15 +116,14 @@ const CalendarScreen = () => {
         <Text>Address: {appointment.address}</Text>
         <Text>Phone Number: {appointment.phoneNumber}</Text>
         <Text>Additional Notes: {appointment.additionalNotes}</Text>
-        <Button 
-      title="Delete" 
-      onPress={() => handleDeleteAppointment(appointment.nameOfAppointment)}
-      color="red"
-    />
+        <Button
+          title="Delete"
+          onPress={() => handleDeleteAppointment(appointment.nameOfAppointment)}
+          color="red"
+        />
       </View>
     ));
   };
-
 
   const handleDeleteAppointment = async (nameOfAppointment) => {
     try {
@@ -137,8 +143,7 @@ const CalendarScreen = () => {
       Alert.alert("Error", "An unexpected error occurred");
     }
   };
-  
-  
+
   const fetchAppointments = async () => {
     try {
       const apiUrl = 'https://serious-ascent-412517.ue.r.appspot.com/api/getAppointmentInfo';
@@ -149,46 +154,54 @@ const CalendarScreen = () => {
       console.error('Error fetching Appointment information:', error);
     }
   };
-  
+
   useFocusEffect(
     React.useCallback(() => {
       fetchAppointments();
     }, [])
   );
-  
-  
-  
+
+  const CustomPicker = ({ selectedValue, onValueChange, data }) => {
+    return (
+      <Picker
+        selectedValue={selectedValue}
+        onValueChange={onValueChange}
+        style={styles.picker}
+      >
+        {data.map((item, index) => (
+          <Picker.Item key={index} label={item.label} value={item.value} />
+        ))}
+      </Picker>
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Picker
+        <CustomPicker
           selectedValue={selectedMonth}
           onValueChange={(itemValue) => setSelectedMonth(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="January" value={0} />
-          <Picker.Item label="February" value={1} />
-          <Picker.Item label="March" value={2} />
-          <Picker.Item label="April" value={3} />
-          <Picker.Item label="May" value={4} />
-          <Picker.Item label="June" value={5} />
-          <Picker.Item label="July" value={6} />
-          <Picker.Item label="August" value={7} />
-          <Picker.Item label="September" value={8} />
-          <Picker.Item label="October" value={9} />
-          <Picker.Item label="November" value={10} />
-          <Picker.Item label="December" value={11} />
-        </Picker>
+          data={[
+            { label: 'January', value: 0 },
+            { label: 'February', value: 1 },
+            { label: 'March', value: 2 },
+            { label: 'April', value: 3 },
+            { label: 'May', value: 4 },
+            { label: 'June', value: 5 },
+            { label: 'July', value: 6 },
+            { label: 'August', value: 7 },
+            { label: 'September', value: 8 },
+            { label: 'October', value: 9 },
+            { label: 'November', value: 10 },
+            { label: 'December', value: 11 },
+          ]}
+        />
 
-        <Picker
+        <CustomPicker
           selectedValue={selectedYear}
           onValueChange={(itemValue) => setSelectedYear(itemValue)}
-          style={styles.picker}
-        >
-          {yearsArray.map((year) => (
-            <Picker.Item key={year} label={year.toString()} value={year} />
-          ))}
-        </Picker>
+          data={yearsArray.map((year) => ({ label: year.toString(), value: year }))}
+        />
       </View>
 
       {!isCalendarCollapsed && (
@@ -196,17 +209,14 @@ const CalendarScreen = () => {
           {generateDatesArray().map(date => renderDateCell(date))}
         </View>
       )}
-      
+
       {selectedDate && isCalendarCollapsed && (
         <Animated.View style={[styles.selectedDateContainer, { opacity: fadeAnim }]}>
-          <Text style={styles.selectedDateText}>
-            Selected Date: {selectedDate}/{selectedMonth + 1}/{selectedYear}
-          </Text>
           <Text style={styles.eventsText}>Events for {selectedDate}/{selectedMonth + 1}/{selectedYear}:</Text>
-          {renderAppointmentsForSelectedDate()}
-          <Text></Text>
+          <ScrollView>
+            {renderAppointmentsForSelectedDate()}
+          </ScrollView>
           <Button title="Back" onPress={handleBackButtonPress} />
-          <Text></Text>
           <Button title="New Appointment" onPress={handleNewAppointment} />
         </Animated.View>
       )}
@@ -249,10 +259,20 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     margin: 5,
   },
+  dateCellWithAppoinntment: {
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    backgroundColor: '#C41E3A',
+    margin: 5,
+  },
   dateText: {
     fontSize: 18,
   },
   selectedDateContainer: {
+    flex: 1,
     marginTop: 20,
     alignItems: 'center',
   },
@@ -263,12 +283,12 @@ const styles = StyleSheet.create({
   eventsText: {
     fontSize: 16,
   },
-appointmentContainer: {
-  borderWidth: 1,
-  borderColor: '#ccc',
-  padding: 10,
-  marginVertical: 5,
-}
+  appointmentContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginVertical: 5,
+  }
 });
 
 export default CalendarScreen;
